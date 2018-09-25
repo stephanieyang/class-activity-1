@@ -27,11 +27,11 @@ DF4 <- dplyr::select(DF1,hash,correct)
 DF4$correct <- as.numeric(as.logical(DF4$correct))
 
 # count number of 1s/TRUEs per student
-DF11_pt1 <-  DF4 %>% dplyr::group_by(hash) %>% summarise(correct = sum(correct, na.rm = TRUE))
+DF5 <-  DF4 %>% dplyr::group_by(hash) %>% summarise(correct = sum(correct, na.rm = TRUE))
 
 # assumed this is the max number of questions possible to answer
 num_questions = max(table(DF4$hash))
 
 # divide every student's score by the max to get their average
-DF11_pt1$correct = DF11_pt1$correct / num_questions
+DF5$correct = DF5$correct / num_questions
 ```
