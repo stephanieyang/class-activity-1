@@ -1,0 +1,37 @@
+---
+title: "class-activity-1"
+author: "Stephanie Yang"
+date: "September 20, 2018"
+output: html_document
+---
+
+```{r}
+library(dplyr)
+library(tidyr)
+# load data
+DF1 <- read.csv("swirl-data.csv",header=TRUE)
+
+# subset
+DF2 <- dplyr::select(DF1,hash,lesson_name,attempt)
+
+# summarize with number of attempts
+DF3 <- DF2 %>% dplyr::group_by(hash, lesson_name) %>% summarise(attempt = sum(attempt))
+
+# summarize by lesson name
+DF3 <- tidyr::spread(DF3,lesson_name, attempt)
+
+# get student correctness entries
+DF4 <- dplyr::select(DF1,hash,correct)
+
+# convert to 0/1 (TRUE/FALSE entry -> logical value -> number)
+DF4$correct <- as.numeric(as.logical(DF4$correct))
+
+# count number of 1s/TRUEs per student
+DF11_pt1 <-  DF4 %>% dplyr::group_by(hash) %>% summarise(correct = sum(correct, na.rm = TRUE))
+
+# assumed this is the max number of questions possible to answer
+num_questions = max(table(DF4$hash))
+
+# divide every student's score by the max to get their average
+DF11_pt1$correct = DF11_pt1$correct / num_questions
+```
